@@ -8,28 +8,25 @@ contract Roles is AccessControl {
     bytes32 public constant ROL_USER = keccak256("ROL_USER");
 
     constructor() {
-        _setupRole(ROL_ADMIN, msg.sender);
+        _setupRole(ROL_ADMIN, _msgSender());
     }
 
-    function soloAdmin() public {
-        require(
-            hasRole(ROL_ADMIN, msg.sender),
-            "This function is only for admin role"
-        );
+    function soloAdmin() public onlyRole(ROL_ADMIN) {
+        // do something
     }
 
     function soloUser() public {
         require(
-            hasRole(ROL_USER, msg.sender),
+            hasRole(ROL_USER, _msgSender()),
             "This function is only for user role"
         );
     }
 
     function agregarRol(bytes32 _rol, address account) public {
         require(
-            hasRole(ROL_ADMIN, msg.sender),
+            hasRole(ROL_ADMIN, _msgSender()),
             "This function is only for admin role"
         );
-        _setupRole(_rol, account);
+        _grantRole(_rol, account);
     }
 }

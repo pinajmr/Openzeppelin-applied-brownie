@@ -2,14 +2,14 @@
 
 
 # Check deployer if it is role admin
-from scripts.deploy_owner import deploy_roles
+from scripts.deploy_create import deploy_contract
 from  scripts.helpful_scripts import get_account
-from brownie import exceptions
+from brownie import (exceptions,Roles,Reto1Control)
 import pytest
 
 def test_role_admin():
     #Arrange
-    roles_contract = deploy_roles()
+    roles_contract = deploy_contract(Roles)
     account = get_account()
     ROL_ADMIN = roles_contract.ROL_ADMIN()
     #Act 
@@ -20,7 +20,7 @@ def test_role_admin():
 # Add role user
 def test_role_add_user():
     #Arrange
-    roles_contract = deploy_roles()
+    roles_contract = deploy_contract(Roles)
     account_admin = get_account()
     account_user = get_account(index=1)
     account_new_user = get_account(index=2)
@@ -36,4 +36,4 @@ def test_role_add_user():
     # Check if the user role cannot access to agregarRol function
     with pytest.raises(exceptions.VirtualMachineError):
         roles_contract.agregarRol(ROL_USER,account_new_user,{"from":account_new_user})
-    
+

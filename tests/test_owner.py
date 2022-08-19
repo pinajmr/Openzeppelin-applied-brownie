@@ -1,14 +1,14 @@
 from scripts.helpful_scripts import (
     get_account,
 )
-from scripts.deploy_owner import deploy_owner
-from brownie import (exceptions)
+from scripts.deploy_create import deploy_contract
+from brownie import (exceptions, Owner)
 import pytest
 
 # Every one can call forAll
 def test_forAll():
     # Arrange
-    owner_contract = deploy_owner()
+    owner_contract = deploy_contract(Owner)
     account = get_account(3)
     # Act
     tx = owner_contract.forAll({"from": account})
@@ -19,7 +19,7 @@ def test_forAll():
 #This test is fail becasuse is call for other than not owener
 def test_justOwner():
     # Arrange
-    owner_contract = deploy_owner()
+    owner_contract = deploy_contract(Owner)
     account = get_account(index=1)
     # Act
     # Assert 
@@ -32,7 +32,7 @@ def test_justOwner():
 # This test is passed becasuse is call is the owner
 def test_justOwnerTrue():
     # Arrange
-    owner_contract = deploy_owner()
+    owner_contract = deploy_contract(Owner)
     account = get_account()
     # Act
     tx = owner_contract.justOwner({"from": account})
